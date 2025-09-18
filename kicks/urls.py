@@ -9,4 +9,5 @@ urlpatterns = [
     #Refresh endpoint
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/products/", include("products.urls")),
+    path("api/orders/", include("orders.urls")),
 ]
