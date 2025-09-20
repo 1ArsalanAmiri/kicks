@@ -6,6 +6,7 @@ from rest_framework.filters import OrderingFilter
 from .filters import ProductFilter
 from .serializers import *
 from .pagination import ProductPagination
+from rest_framework.pagination import PageNumberPagination
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -13,6 +14,8 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user and request.user.is_staff
+
+
 
 class ProductListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAdminOrReadOnly]
@@ -30,30 +33,30 @@ class ProductListCreateView(generics.ListCreateAPIView):
             return ProductListSerializer
         return ProductDetailSerializer
 
+
+
+
 class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
 
 
+
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
+    lookup_field = "slug"
 
-    def get_serializer_context(self):
-            context = super().get_serializer_context()
-            product = self.get_object()
-            similar_products = Product.objects.filter(categories__overlap=product.categories).exclude(product.id)
-            context['similar_products'] = similar_products
-            return context
+
 
 
 class ProductCategoryView(APIView):
     def get(self, request, *args, **kwargs):
         categories = set()
         for product in Product.objects.all():
-            categories.update(product.categories or [])
+            categories.update(product.Category.name or [])
 
         return Response({"categories": list(categories)})
 
@@ -82,3 +85,30 @@ class ProductFilterView(generics.ListAPIView):
 
         qs = qs.order_by(sort).distinct()
         return qs
+
+
+
+class ProductSlugsView(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSlugSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+
+
+class SimilarProductsPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = "page_size"
+    max_page_size = 20
+
+
+
+class SimilarProductsView(generics.ListAPIView):
+    serializer_class = ProductMinimalSerializer
+    pagination_class = SimilarProductsPagination
+
+    def get_queryset(self):
+        product_slug = self.kwargs["slug"]
+        product = Product.objects.get(slug=product_slug)
+        return Product.objects.filter(categories__in=product.categories.all()).exclude(slug=product.slug).distinct()

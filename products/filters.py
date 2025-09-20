@@ -1,5 +1,8 @@
 import django_filters
 from .models import Product
+from django_filters import rest_framework as filters
+
+
 
 class ProductFilter(django_filters.FilterSet):
     size = django_filters.CharFilter(field_name="sizes__value", lookup_expr="iexact")
@@ -10,6 +13,14 @@ class ProductFilter(django_filters.FilterSet):
     #Price filter
     price_min = django_filters.NumberFilter(field_name="price", lookup_expr="gte" , min_value=0)
     price_max = django_filters.NumberFilter(field_name="price", lookup_expr="lte" , max_value=1000)
+
+    ordering = filters.OrderingFilter(
+        fields=(
+            ('price', 'price'),   # price ascending
+            ('-price', 'price_desc'),  # price descending
+            ('title', 'title'),
+        )
+    )
 
     def filter_sizes(self, queryset, name, value):
         values = self.request.GET.getlist('size')

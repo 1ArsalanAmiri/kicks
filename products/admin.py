@@ -1,23 +1,21 @@
-# products/admin.py
 from django.contrib import admin
-from .models import Product, ProductSize, ProductImage, Tag, Category
+from .models import Product, ProductImage, ProductSize, Category
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ('filename', 'alt_text', 'order', 'image_type')
+    readonly_fields = ()
+    ordering = ('order',)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'is_new_release', 'is_available', 'stock', 'display_categories')
-    list_filter = ('is_new_release', 'is_available', 'categories', 'tags')
-    search_fields = ('title', 'description_text')
-    ordering = ('-id',)
-
-    def display_categories(self, obj):
-        return ", ".join([c.name for c in obj.categories.all()])
-    display_categories.short_description = 'Categories'
-
-
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('product', 'filename')
-    search_fields = ('product__title', 'filename')
+    list_display = ('title', 'slug', 'price', 'is_available', 'stock', 'is_new_release', 'review')
+    readonly_fields = ('slug','categories')
+    list_filter = ('is_available', 'is_new_release', 'categories', 'genders')
+    search_fields = ('title', 'slug', 'tags')
+    inlines = [ProductImageInline]
+    filter_horizontal = ('categories', 'sizes')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -28,3 +26,4 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductSizeAdmin(admin.ModelAdmin):
     list_display = ('value', 'active')
     list_filter = ('active',)
+    search_fields = ('value',)

@@ -1,14 +1,11 @@
+# products/urls.py
 from django.urls import path
-from .views import (
-    ProductListCreateView,
-    ProductRetrieveUpdateDestroyView, ProductCategoryView, ProductFilterView,
-)
-
+from .views import *
 urlpatterns = [
-    # Products
-    path("", ProductListCreateView.as_view(), name="product-list-create"),
-    path("<int:pk>/", ProductRetrieveUpdateDestroyView.as_view(), name="product-detail"),
-    path("categories/", ProductCategoryView.as_view(), name="product-list-create"),
+    path("" , ProductListCreateView.as_view(), name= "product-list"),
+    path("<slug:slug>" , ProductDetailView.as_view(), name= "product-detail"),
+    path("slugs/", ProductSlugsView.as_view(), name="product-slugs"),
     path("filter/", ProductFilterView.as_view(), name="product-filter"),
+    path("<slug:slug>/similar/", SimilarProductsView.as_view(), name="similar-products"),
 
 ]
