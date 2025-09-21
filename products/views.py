@@ -9,6 +9,7 @@ from .management.commands import create_test_products
 
 
 def create_test_products(request):
+
     TEST_PRODUCTS = [
         {
             "id": 1,
@@ -1118,7 +1119,7 @@ def create_test_products(request):
             defaults={
                 'title': p['title'],
                 'slug': p['slug'],
-                'description': p['descriptionText'],
+                'description_text': p['descriptionText'],
                 'price': p['price'],
                 'review': p['review'],
                 'is_new_release': p['isNewRelease']
