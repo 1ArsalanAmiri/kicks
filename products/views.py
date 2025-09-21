@@ -1118,7 +1118,7 @@ def create_test_products(request):
             defaults={
                 'title': p['title'],
                 'slug': p['slug'],
-                'description': p['descriptionText'],
+                'description_text': p['descriptionText'],
                 'price': p['price'],
                 'review': p['review'],
                 'is_new_release': p['isNewRelease']
