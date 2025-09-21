@@ -8,11 +8,10 @@ class ProductSizeSerializer(serializers.ModelSerializer):
         fields = ['value' , "active"]
 
 
-
 class ProductMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ["id", "title", "price", "review"]
+        fields = ["id", "title", "price", "is_new_release" ]
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -23,18 +22,16 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    # tags = serializers.ListField(child=serializers.CharField(max_length=7),required=False)
     categories = serializers.SlugRelatedField(many=True,read_only=True,slug_field='name')
     class Meta:
         model = Product
-        fields = ['id', 'title','slug', 'price', 'description_text' , 'categories' , 'review' , 'tags']
+        fields = ['id', 'title','slug', 'price', 'description_text' , 'categories' , 'review' ]
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     sizes = ProductSizeSerializer(many=True, read_only=True)
     colors = serializers.ListField(child=serializers.CharField(max_length=7),required=False)
     images = ProductImageSerializer(many=True, read_only=True)
-    tags = serializers.ListField(child=serializers.CharField(max_length=20),required=False)
     categories = serializers.SlugRelatedField(many=True,read_only=True,slug_field='name')
 
 
@@ -43,8 +40,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title','slug', 'description_text', 'description_options',
             'categories', 'genders', 'price', 'sizes', 'colors',
-            'is_new_release', 'review', 'images',
-            'is_available', 'stock', 'tags'
+            'is_new_release', 'review', 'images', 'stock',
         ]
 
     def create(self, validated_data):
@@ -78,7 +74,6 @@ class ProductSerializer(serializers.ModelSerializer):
     sizes = ProductSizeSerializer(many=True, read_only=True)
     colors = serializers.ListField(child=serializers.CharField(max_length=7),required=False)
     images = ProductImageSerializer(many=True, read_only=True)
-    tags = serializers.ListField(child=serializers.CharField(max_length=20),required=False)
     similar_products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all(), required=False)
     categories = serializers.SlugRelatedField(many=True,read_only=True,slug_field='name')
 
@@ -87,7 +82,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id", "title", "description_text", "description_options","slug",
             "categories", "genders", "price",
-            "is_new_release", "review", "similar_products", "tags",
+            "is_new_release", "review", "similar_products",
             "sizes", "colors", "images"
         ]
 

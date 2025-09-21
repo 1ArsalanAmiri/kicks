@@ -106,7 +106,6 @@ class VerifyUserOTPView(generics.GenericAPIView):
 
 
 
-
 class RequestOTPView(generics.GenericAPIView):
     serializer_class = RequestOTPSerializer
 

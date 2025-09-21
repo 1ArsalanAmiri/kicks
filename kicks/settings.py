@@ -1,13 +1,15 @@
 from pathlib import Path
-import environ
 import corsheaders
+import environ
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Load environment variables
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+env = environ.Env(DEBUG=(bool, False))
+
+
 environ.Env.read_env(BASE_DIR / ".env")
 
 
@@ -16,6 +18,9 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,7 +36,6 @@ INSTALLED_APPS = [
     'rest_framework_nested',
     'rest_framework_simplejwt',
     'products',
-    'orders'
 ]
 
 MIDDLEWARE = [
@@ -72,6 +76,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -125,6 +130,7 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
 
 
+
 CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
     default=[
@@ -132,5 +138,6 @@ CORS_ALLOWED_ORIGINS = env.list(
         "http://127.0.0.1:3000"
     ]
 )
+
 
 CORS_ALLOW_CREDENTIALS = True

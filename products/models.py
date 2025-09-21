@@ -26,24 +26,25 @@ class Category(models.Model):
 
 class Product(models.Model):
 
+
+    objects = None
     title = models.CharField(max_length=255)
     description_text = models.TextField()
     description_options = models.JSONField(default=list, blank=True)
     slug = models.SlugField(unique=True , blank=True)
     categories = models.ManyToManyField(Category, blank=True)
-    tags = models.JSONField(default=list, blank=True)
     genders = models.JSONField(default=list, blank=True)  # ["Men", "Women" , "Kids"]
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2 , db_index=True)
     sizes = models.ManyToManyField(ProductSize, blank=True)
     colors = models.JSONField(default=list, blank=True)
     is_new_release = models.BooleanField(default=False)
     stock = models.PositiveIntegerField(default=0)
-    is_available = models.BooleanField(default=True)
     review = models.DecimalField(max_digits=2, decimal_places=1,validators=[MinValueValidator(0), MaxValueValidator(5)],default=0)
 
     @property
-    def similar_products_ids(self):
-        return list(Product.objects.filter(categories__in=self.categories.all()).exclude(id=self.id).distinct().values_list('id', flat=True))
+    def similar_products_ids(self , limit=5):
+        return list(Product.objects.filter(categories__in=self.categories.all()).exclude(id=self.id).distinct()[:limit].values_list('id', flat=True))
+
 
 
     def save(self, *args, **kwargs):

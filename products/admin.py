@@ -10,10 +10,10 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'price', 'is_available', 'stock', 'is_new_release', 'review')
+    list_display = ('title', 'slug', 'price', 'stock', 'is_new_release', 'review')
     readonly_fields = ('slug','categories')
-    list_filter = ('is_available', 'is_new_release', 'categories', 'genders')
-    search_fields = ('title', 'slug', 'tags')
+    list_filter = ('is_new_release', 'categories', 'genders')
+    search_fields = ('title', 'slug')
     inlines = [ProductImageInline]
     filter_horizontal = ('categories', 'sizes')
 
