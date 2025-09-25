@@ -1,39 +1,63 @@
-Kicks Project
+# Kicks Project
 
-A webstie for selling shoes products.
+A website for selling shoe products.
 
-made with Python , Django , Django REST Framework , REST JWT , and ...
+Built with **Python**, **Django**, **Django REST Framework**, **REST JWT**, and more.
 
-NOTE : This app is only made for returning API's and its not a kind of full developed website .
-and it meant to be compelete if the front-end stack is done .
+---
 
+## Note
 
-INSTALLATION :
-first make a directory in your desktop :
+This app is designed **only to provide APIs** and is **not a fully developed frontend website**.  
+It is meant to be completed when the frontend stack is implemented.
 
-CMD :
-    mkdir kicks
-    cd kicks 
-    git init 
-    git clone https://github.com/1ArsalanAmiri/kicks
+---
 
-when cloning is is done : 
-    pip install -r requirements.txt 
+## Installation
 
-when downloading packages is done :
-    python.exe manage.py runserver:8000
+1. Create a directory on your desktop:
 
-accessable API's:
-    app:accounts
-    localhost:8000/api/accounts/register  "registering a user"
-    localhost:8000/api/accounts/request-otp  "requesting a one time password for verifying the user via email Verification NOTE: the set otp for developing mode is 123456"
-    localhost:8000/api/accounts/verify-otp   "verifying the entered otp code and creating user in database , also: returning the access and refresh code to the front-end developer for using authenticational purposes"
-    app:products
-    localhost:8000/api/products  "returns a JSON list of submited products in database"
-    localhost:8000/api/products/"slug" "returns the product details"
-    localhost:8000/api/products/slug/"similar"  "returns the similar products to the base product with the same category"
-    localhost:8000/api/products/filter  "filtering the products with some specefic details"
-    
+```bash
+mkdir kicks
+cd kicks
+Initialize git and clone the repository:
 
+bash
+Copy code
+git init
+git clone https://github.com/1ArsalanAmiri/kicks
+Install the required packages:
 
-    
+bash
+Copy code
+pip install -r requirements.txt
+Run the development server:
+
+bash
+Copy code
+python manage.py runserver 8000
+Accessible APIs
+app: accounts
+POST /api/accounts/register
+Register a new user.
+
+POST /api/accounts/request-otp
+Request a one-time password (OTP) for verifying the user via email.
+Note: For development mode, the OTP is set to 123456.
+
+POST /api/accounts/verify-otp
+Verify the entered OTP code and create the user in the database.
+Also returns the access and refresh tokens for authentication purposes.
+
+app: products
+GET /api/products
+Returns a JSON list of submitted products in the database.
+
+GET /api/products/<slug>
+Returns the details of a specific product.
+
+GET /api/products/slug/<slug>/similar
+Returns similar products to the base product within the same category.
+
+POST /api/products/filter
+Filter products based on specific criteria.
